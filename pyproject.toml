@@ -7,6 +7,3 @@ dependencies = [
     "python-pptx",
     "python-docx"
 ]
-
-[tool.vercel]
-entrypoint = "api.generate:handler"
