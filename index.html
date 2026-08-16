@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Studio MC LesAtelier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --kw1c-blue:      #0071bc;
+    --kw1c-blue-dark: #005a96;
+    --kw1c-blue-tint: #eef5fc;
+    --kw1c-red:       #ed1c24;
+    --kw1c-red-dark:  #c01018;
+    --page-bg:        #e9eef4;
+    --surface:        #ffffff;
+    --field-bg:       #f4f8fc;
+    --field-border:   #cbd8e6;
+    --text-primary:   #16212c;
+    --text-secondary: #46545f;
+    --text-muted:     #78848f;
+    --line:           #e4eaf1;
+    --shadow-card:    0 6px 24px rgba(20,45,72,0.10);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--page-bg); color: var(--text-primary);
+    font-family: 'Inter', 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+
+  .app-header { width: 100%; background: linear-gradient(180deg, #0071bc 0%, #0069b0 100%); color: #fff; }
+  .app-header .inner { display: flex; align-items: center; gap: 16px; padding: 22px 32px; max-width: 1180px; margin: 0 auto; }
+  .brand { display: flex; align-items: center; gap: 16px; }
+  .brand .mark {
+    flex: 0 0 auto; background: #fff; border-radius: 10px; padding: 11px 12px;
+    display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 10px rgba(0,0,0,0.18);
+  }
+  .brand .mark svg { height: 20px; width: auto; display: block; }
+  .brand-text { display: flex; flex-direction: column; }
+  .brand-text b { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1.45rem; line-height: 1.15; }
+  .brand-text small { font-size: 0.82rem; font-weight: 400; opacity: 0.9; margin-top: 2px; }
+  .progress-bar-full { width: 100%; height: 5px; background: var(--kw1c-red); }
+  .progress-bar-full .fill { display: none; }
+
+  .app-body { padding: 34px 0 60px; }
+  .container { width: 100%; max-width: 780px; margin: 0 auto; padding: 0 24px; }
+
+  .tabs { display: flex; gap: 4px; margin-bottom: 10px; border-bottom: 2px solid var(--line); }
+  .tab {
+    background: none; border: none; padding: 12px 20px; cursor: pointer;
+    font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 600; color: var(--text-muted);
+    border-bottom: 3px solid transparent; margin-bottom: -2px; border-radius: 8px 8px 0 0; transition: color 0.15s, background 0.15s;
+  }
+  .tab:hover { color: var(--kw1c-blue); background: var(--kw1c-blue-tint); }
+  .tab.active { color: var(--kw1c-blue); border-bottom-color: var(--kw1c-blue); }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .tabs-help { color: var(--text-secondary); font-size: 0.88rem; margin: 14px 0 24px; }
+
+  .page-title { font-family: 'Poppins', sans-serif; font-size: 1.85rem; font-weight: 700; color: var(--text-primary); margin: 0 0 8px; line-height: 1.15; }
+  .page-sub { color: var(--text-secondary); font-size: 0.95rem; margin: 0 0 20px; max-width: 680px; }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--kw1c-blue);
+    border-radius: 16px; padding: 30px 28px; box-shadow: var(--shadow-card);
+  }
+
+  .field { margin-bottom: 24px; }
+  label.field-label {
+    display: block; font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 600;
+    color: var(--text-primary); margin: 0 0 8px; letter-spacing: 0;
+  }
+  input[type="text"], textarea, select {
+    width: 100%; border: 1.5px solid var(--field-border); border-radius: 10px; padding: 12px 14px;
+    font-family: inherit; font-size: 0.95rem; color: var(--text-primary); background: var(--field-bg);
+    transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+  }
+  input[type="text"]::placeholder, textarea::placeholder { color: #9aa6b2; }
+  input[type="text"]:focus, textarea:focus, select:focus {
+    outline: none; border-color: var(--kw1c-blue); background: #fff; box-shadow: 0 0 0 3px rgba(0,113,188,0.15);
+  }
+  textarea { min-height: 190px; resize: vertical; line-height: 1.6; }
+  textarea.prompt { min-height: 150px; font-size: 0.85rem; background: #f7f9fb; }
+  select {
+    appearance: none; -webkit-appearance: none; cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%230071bc' d='M6 8 0 0h12z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 14px center; padding-right: 34px;
+  }
+
+  input[type="file"] {
+    width: 100%; font-family: inherit; font-size: 0.9rem; color: var(--text-secondary);
+    background: var(--field-bg); border: 1.5px dashed var(--field-border); border-radius: 10px; padding: 12px 14px;
+  }
+  input[type="file"]::file-selector-button {
+    font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.82rem; color: #fff;
+    background: var(--kw1c-blue); border: none; border-radius: 20px; padding: 8px 16px; margin-right: 12px; cursor: pointer;
+  }
+  input[type="file"]::file-selector-button:hover { background: var(--kw1c-blue-dark); }
+
+  .hint { color: var(--text-muted); font-size: 0.82rem; line-height: 1.5; margin: 8px 0 0; padding-left: 12px; border-left: 2px solid #bcd7ee; }
+  .hint strong { color: var(--text-secondary); font-weight: 600; }
+
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+  .actions { display: flex; align-items: center; gap: 16px; margin-top: 6px; flex-wrap: wrap; }
+  .btn {
+    background: var(--kw1c-red); color: #fff; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.86rem;
+    border: none; border-radius: 24px; padding: 13px 30px; cursor: pointer; letter-spacing: 0.3px;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.15s;
+  }
+  .btn:hover:not(:disabled) { background: var(--kw1c-red-dark); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(237,28,36,0.28); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn.secondary { background: var(--kw1c-blue); }
+  .btn.secondary:hover:not(:disabled) { background: var(--kw1c-blue-dark); box-shadow: 0 6px 16px rgba(0,113,188,0.28); }
+
+  .status { font-size: 0.9rem; color: var(--text-secondary); min-height: 1.2em; }
+  .status.error { color: var(--kw1c-red-dark); font-weight: 600; }
+  .status.ok { color: var(--kw1c-blue); font-weight: 600; }
+  .spinner {
+    display: inline-block; width: 16px; height: 16px; vertical-align: -3px; margin-right: 8px;
+    border: 2px solid rgba(0,113,188,0.25); border-top-color: var(--kw1c-blue); border-radius: 50%; animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .output-block { margin-top: 26px; padding-top: 24px; border-top: 1px dashed var(--line); }
+  .hidden { display: none; }
+
+  .footer-note { margin: 30px 0 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; max-width: 700px; border-top: 1px solid var(--line); padding-top: 18px; }
+  .footer-note a { color: var(--kw1c-blue); text-decoration: none; font-weight: 600; }
+  .footer-note a:hover { text-decoration: underline; }
+
+  @media (max-width: 768px) {
+    .app-header .inner { padding: 16px; gap: 12px; }
+    .brand .mark { padding: 9px 10px; }
+    .brand .mark svg { height: 17px; }
+    .brand-text b { font-size: 1.15rem; }
+    .container { padding: 0 16px; }
+    .card { padding: 22px 18px; }
+    .page-title { font-size: 1.4rem; }
+    .row { grid-template-columns: 1fr; gap: 0; }
+    .btn { width: 100%; text-align: center; }
+  }
+</style>
+</head>
+<body>
+  <header class="app-header">
+    <div class="inner">
+      <div class="brand"><span class="mark"><svg viewBox="0 0 4322 2215" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="KW1C"><path fill="#ed1c24" d="M0 2215 720 0 1430 2215Z"/><path fill="#ed1c24" d="M1441 2215 2161 0 2881 2215Z"/><path fill="#ed1c24" d="M2892 2215 3602 0 4322 2215Z"/></svg></span><span class="brand-text"><b>Studio MC LesAtelier</b><small>Een tool gemaakt voor en door de opleiding Marketing &amp; Communicatie van KW1C</small></span></div>
+    </div>
+  </header>
+  <div class="progress-bar-full"><div class="fill"></div></div>
+
+  <main class="app-body">
+    <div class="container">
+
+      <div class="tabs">
+        <button class="tab active" data-tab="snel">Snel een presentatie</button>
+        <button class="tab" data-tab="workshop">Workshop ontwerpen</button>
+      </div>
+
+      <p class="tabs-help"><strong>Snel een presentatie</strong> zet losse tekst om in slides. <strong>Workshop ontwerpen</strong> maakt een complete les vanuit je module.</p>
+
+      <!-- ============ TAB 1: SNEL ============ -->
+      <section class="panel active" id="panel-snel">
+        <h1 class="page-title">Simpel en snel een basis-presentatie in huisstijl</h1>
+        <p class="page-sub">Les-opzet gereed? Plak je tekst hieronder in het tekstveld, haal een lekkere koffie bij La Cantina en HOPPA... je basispresentatie staat voor je klaar in de downloadmap! Easy peasy 🍋 De opzet, de structuur en het design staan dan al goed. De confetti en slingers voeg je zelf nog toe: afbeeldingen, eigen voorbeelden en teksten die minder doorsnee zijn.</p>
+        <p class="page-sub">Het handige van deze tool is dat je niet meer met een leeg scherm begint... Het opmaakwerk is klaar, zodat je tijd overhoudt voor de inhoud! Let's gooo!</p>
+
+        <div class="card">
+          <div class="field">
+            <label class="field-label" for="onderwerp">Onderwerp / titel (optioneel)</label>
+            <input type="text" id="onderwerp" placeholder="Bijv. Marketing in het AI-tijdperk">
+          </div>
+          <div class="row">
+            <div class="field">
+              <label class="field-label" for="naam">Naam</label>
+              <input type="text" id="naam" placeholder="Bijv. Jan Jansen">
+            </div>
+            <div class="field">
+              <label class="field-label" for="email">E-mailadres</label>
+              <input type="text" id="email" placeholder="Bijv. j.jansen@kw1c.nl">
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label" for="telefoon">Telefoonnummer (optioneel)</label>
+            <input type="text" id="telefoon" placeholder="Bijv. 06 12 34 56 78">
+            <p class="hint">Naam, e-mail en telefoon komen onderaan de titelslide. Laat je ze leeg, dan staat er niets.</p>
+          </div>
+          <div class="field">
+            <label class="field-label" for="tekst">Je tekst</label>
+            <textarea id="tekst" placeholder="Plak hier je tekst. Hoe meer structuur (kopjes, alinea's), hoe beter de indeling."></textarea>
+            <p class="hint">Een half A4 tot een paar alinea's werkt prima. Kopjes en opsommingen geven de mooiste indeling.</p>
+          </div>
+          <div class="actions">
+            <button class="btn" id="maakBtn">Maak presentatie</button>
+            <span class="status" id="status"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ TAB 2: WORKSHOP ============ -->
+      <section class="panel" id="panel-workshop">
+        <h1 class="page-title">Ontwerp een complete workshop vanuit je module</h1>
+        <p class="page-sub">Upload je module met opdracht of plak de tekst, en klik op genereren. De tool maakt zelf redelijke aannames, zoekt actuele bronnen erbij en levert een volledig workshopontwerp. Daarna maak je er met één klik een PowerPoint van, en download je het uitgewerkte document desgewenst als Word.</p>
+
+        <div class="card">
+          <div class="field">
+            <label class="field-label" for="wsModule">Module met opdracht (PDF, Word of tekst)</label>
+            <input type="file" id="wsModule" accept=".pdf,.docx,.txt,.md">
+            <p class="hint">Upload een bestand, of plak hieronder de tekst. Eén van de twee is genoeg.</p>
+          </div>
+          <div class="field">
+            <label class="field-label" for="wsModuleTekst">Of plak de tekst van de module</label>
+            <textarea id="wsModuleTekst" placeholder="Plak hier de tekst van je module of opdracht."></textarea>
+          </div>
+          <div class="field">
+            <label class="field-label" for="wsOnderwerp">Onderwerp / titel (optioneel)</label>
+            <input type="text" id="wsOnderwerp" placeholder="Bijv. Workshop Customer Journey">
+          </div>
+          <div class="row">
+            <div class="field">
+              <label class="field-label" for="wsNaam">Naam</label>
+              <input type="text" id="wsNaam" placeholder="Bijv. Jan Jansen">
+            </div>
+            <div class="field">
+              <label class="field-label" for="wsEmail">E-mailadres</label>
+              <input type="text" id="wsEmail" placeholder="Bijv. j.jansen@kw1c.nl">
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label" for="wsTelefoon">Telefoonnummer (optioneel)</label>
+            <input type="text" id="wsTelefoon" placeholder="Bijv. 06 12 34 56 78">
+            <p class="hint">Naam, e-mail en telefoon komen onderaan de titelslide. Laat je ze leeg, dan staat er niets.</p>
+          </div>
+          <div class="field">
+            <label class="field-label" for="wsProfiel">Profiel</label>
+            <select id="wsProfiel">
+              <option value="standaard">Studio MC standaard</option>
+              <option value="didactiek">Didactiek en lesniveau</option>
+            </select>
+            <p class="hint"><strong>Studio MC standaard</strong> volgt de vaste MCS-aanpak. <strong>Didactiek en lesniveau</strong> ontwerpt sterker vanuit leerdoelen, alignment en niveau. Twijfel je? Kies de standaard.</p>
+          </div>
+          <div class="field">
+            <label class="field-label" for="wsPrompt">Prompt (aanpasbaar)</label>
+            <p class="hint">Dit is de opdracht aan de AI. Je hoeft dit niet te lezen of aan te passen, het werkt gewoon. Wil je iets extra's meegeven? Typ dat onderaan.</p>
+            <textarea class="prompt" id="wsPrompt"></textarea>
+          </div>
+          <div class="actions">
+            <button class="btn" id="wsGenBtn">Genereer workshop</button>
+            <span class="status" id="wsStatus"></span>
+          </div>
+
+          <div class="output-block hidden" id="wsOutput">
+            <div class="field">
+              <label class="field-label" for="wsContent">Gegenereerde workshop (bewerkbaar)</label>
+              <p class="hint">De tekens zoals # en | zijn opmaak. Die worden nette koppen en tabellen in je Word en PowerPoint. Je mag de tekst hier gerust nog aanpassen.</p>
+              <textarea id="wsContent"></textarea>
+            </div>
+            <div class="actions">
+              <button class="btn" id="wsPptBtn">Maak presentatie</button>
+              <button class="btn secondary" id="wsWordBtn">Download als Word</button>
+              <span class="status" id="wsStatus2"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <p class="footer-note">Deze tool is gemaakt voor en door Studio MC. Hét bureau van de KW1C-opleiding Marketing &amp; Communicatie. Precies dit soort handige AI-toepassingen leren onze studenten zelf bedenken en bouwen. Heb je een goed idee? Leg het voor aan de crew via <a href="mailto:studio-mc@kw1c.nl">studio-mc@kw1c.nl</a> #samenbereikenwemeer</p>
+    </div>
+  </main>
+
+<script>
+  // ---------- Tabs ----------
+  document.querySelectorAll('.tab').forEach(t => {
+    t.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      document.getElementById('panel-' + t.dataset.tab).classList.add('active');
+    });
+  });
+
+  function contactFrom(naamId, emailId, telId) {
+    return [
+      document.getElementById(naamId).value.trim(),
+      document.getElementById(emailId).value.trim(),
+      document.getElementById(telId).value.trim()
+    ].filter(Boolean).join('  ★  ');
+  }
+  function slug(s, fallback) {
+    return (s || fallback).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || fallback;
+  }
+  function downloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  }
+  function fileToBase64(file) {
+    return new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onload = () => res(r.result.split(',')[1]);
+      r.onerror = () => rej(new Error('Kon het bestand niet lezen.'));
+      r.readAsDataURL(file);
+    });
+  }
+
+  // ---------- Tab 1: snelle presentatie ----------
+  (function () {
+    const btn = document.getElementById('maakBtn');
+    const statusEl = document.getElementById('status');
+    function setStatus(t, c) { statusEl.className = 'status' + (c ? ' ' + c : ''); statusEl.innerHTML = t; }
+
+    btn.addEventListener('click', async () => {
+      const tekst = document.getElementById('tekst').value.trim();
+      if (!tekst) { setStatus('Plak eerst wat tekst.', 'error'); return; }
+      const onderwerp = document.getElementById('onderwerp').value.trim();
+      const payload = { tekst, onderwerp, contact: contactFrom('naam', 'email', 'telefoon') };
+
+      btn.disabled = true;
+      setStatus('<span class="spinner"></span>Bezig met genereren, even geduld...', '');
+      try {
+        const res = await fetch('/api/generate', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+        });
+        if (!res.ok) {
+          let msg = 'Er ging iets mis (' + res.status + ').';
+          try { const j = await res.json(); if (j.error) msg = j.error; } catch (e) {}
+          setStatus(msg, 'error'); return;
+        }
+        const n = res.headers.get('X-Slide-Count');
+        downloadBlob(await res.blob(), slug(onderwerp, 'presentatie') + '.pptx');
+        setStatus('Klaar' + (n ? ', ' + n + ' slides gemaakt' : '') + '. Het bestand is gedownload.', 'ok');
+      } catch (e) { setStatus('Kon geen verbinding maken met de server.', 'error'); }
+      finally { btn.disabled = false; }
+    });
+  })();
+
+  // ---------- Tab 2: workshop ----------
+  (function () {
+    const genBtn = document.getElementById('wsGenBtn');
+    const pptBtn = document.getElementById('wsPptBtn');
+    const wordBtn = document.getElementById('wsWordBtn');
+    const s1 = document.getElementById('wsStatus');
+    const s2 = document.getElementById('wsStatus2');
+    const out = document.getElementById('wsOutput');
+    const contentEl = document.getElementById('wsContent');
+    function set1(t, c) { s1.className = 'status' + (c ? ' ' + c : ''); s1.innerHTML = t; }
+    function set2(t, c) { s2.className = 'status' + (c ? ' ' + c : ''); s2.innerHTML = t; }
+
+    genBtn.addEventListener('click', async () => {
+      const file = document.getElementById('wsModule').files[0];
+      const moduleTekst = document.getElementById('wsModuleTekst').value.trim();
+      if (!file && !moduleTekst) { set1('Upload een bestand of plak de tekst van je module.', 'error'); return; }
+      const prompt = document.getElementById('wsPrompt').value.trim();
+
+      genBtn.disabled = true;
+      set1('<span class="spinner"></span>Module analyseren en workshop ontwerpen, dit kan even duren...', '');
+      try {
+        const payload = { prompt };
+        if (file) { payload.module_name = file.name; payload.module_b64 = await fileToBase64(file); }
+        else { payload.module_text = moduleTekst; }
+        const res = await fetch('/api/workshop', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) {
+          let msg = 'Er ging iets mis (' + res.status + ').';
+          try { const j = await res.json(); if (j.error) msg = j.error; } catch (e) {}
+          set1(msg, 'error'); return;
+        }
+        const data = await res.json();
+        contentEl.value = data.markdown || '';
+        out.classList.remove('hidden');
+        set1('Klaar! Bekijk en bewerk de workshop hieronder, en maak er dan een presentatie of Word van.', 'ok');
+      } catch (e) { set1('Kon geen verbinding maken met de server.', 'error'); }
+      finally { genBtn.disabled = false; }
+    });
+
+    pptBtn.addEventListener('click', async () => {
+      const markdown = contentEl.value.trim();
+      if (!markdown) { set2('Er is nog geen workshop om een presentatie van te maken.', 'error'); return; }
+      const onderwerp = document.getElementById('wsOnderwerp').value.trim();
+      pptBtn.disabled = true; wordBtn.disabled = true;
+      set2('<span class="spinner"></span>Presentatie maken...', '');
+      try {
+        const res = await fetch('/api/workshop_pptx', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ markdown, onderwerp, contact: contactFrom('wsNaam', 'wsEmail', 'wsTelefoon') })
+        });
+        if (!res.ok) {
+          let msg = 'Er ging iets mis (' + res.status + ').';
+          try { const j = await res.json(); if (j.error) msg = j.error; } catch (e) {}
+          set2(msg, 'error'); return;
+        }
+        const n = res.headers.get('X-Slide-Count');
+        downloadBlob(await res.blob(), slug(onderwerp, 'workshop') + '.pptx');
+        set2('Presentatie klaar' + (n ? ', ' + n + ' slides' : '') + '. Gedownload.', 'ok');
+      } catch (e) { set2('Kon geen verbinding maken met de server.', 'error'); }
+      finally { pptBtn.disabled = false; wordBtn.disabled = false; }
+    });
+
+    wordBtn.addEventListener('click', async () => {
+      const markdown = contentEl.value.trim();
+      if (!markdown) { set2('Er is nog geen workshop om een Word van te maken.', 'error'); return; }
+      const onderwerp = document.getElementById('wsOnderwerp').value.trim();
+      pptBtn.disabled = true; wordBtn.disabled = true;
+      set2('<span class="spinner"></span>Word maken...', '');
+      try {
+        const res = await fetch('/api/word', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ markdown, titel: onderwerp })
+        });
+        if (!res.ok) {
+          let msg = 'Er ging iets mis (' + res.status + ').';
+          try { const j = await res.json(); if (j.error) msg = j.error; } catch (e) {}
+          set2(msg, 'error'); return;
+        }
+        downloadBlob(await res.blob(), slug(onderwerp, 'workshop') + '.docx');
+        set2('Word klaar. Gedownload. Druk in Word op F9 om de inhoudsopgave te vullen.', 'ok');
+      } catch (e) { set2('Kon geen verbinding maken met de server.', 'error'); }
+      finally { pptBtn.disabled = false; wordBtn.disabled = false; }
+    });
+  })();
+
+  // ---------- Standaardprompt ----------
+  const DEFAULT_PROMPT = `Ik ben docent Marketing & Communicatie (MBO niveau 4). Ik upload een module met opdracht. Deze module is leidend voor het ontwerpen van de workshop. De workshop is een theorieles die studenten voorbereidt op een leertaak die zij vervolgens tijdens de praktijklessen uitvoeren. De workshop staat dus altijd in dienst van de leertaak en niet andersom.
+
+#Jouw rol
+Je bent een ervaren MBO-docent Marketing & Communicatie, onderwijskundige, curriculumontwerper en vakexpert Marketing & Communicatie. Je werkt vanuit het kwalificatiedossier Business Services (Crebo 23296), het profiel Marketing & Communication Specialist (Crebo 25727) en de beroepspraktijk van een beginnend Marketing & Communication Specialist. Je bewaakt dat de workshop aansluit bij B1-K1 (Voert taken uit binnen de zakelijke dienstverlening), P6-K1 (Verzorgt marketing- en communicatietrajecten), de beroepspraktijk, de fase van de opleiding en de inhoud van de geuploade module.
+
+STAP 1 - Analyseer eerst de module
+Analyseer de geuploade module grondig. Bepaal waar deze workshop binnen de module past, welke kennis studenten nodig hebben voor de leertaak, welke theorie essentieel is en welke niet, welke beroepssituatie centraal staat, welke beroepsproducten worden ontwikkeld, welke vaardigheden nodig zijn en welke vaktermen studenten moeten kennen. Gebruik de module als primaire bron.
+
+STAP 2 - Maak aannames in plaats van vragen
+Stel GEEN vragen en wacht nergens op antwoord. Maak op elk van de volgende punten een redelijke aanname op basis van de module, en benoem die aannames kort bovenaan onder de kop Aannames: onderwerp en leerdoel van de workshop, de bijbehorende leertaak, het op te leveren product, de fase van de opleiding (orientatie, kern, verdieping of afstuderen), de groepsgrootte, de voorkennis, de gebruikte software of tools, relevante beroepssituaties, actuele ontwikkelingen en mogelijke aandachtspunten. Ga daarna direct door met ontwerpen.
+
+STAP 3 - Raadpleeg actuele en betrouwbare bronnen
+Raadpleeg internetbronnen voor actuele theorie, modellen, praktijkvoorbeelden, trends, onderzoeksresultaten en best practices. Geef voorkeur aan betrouwbare en erkende bronnen zoals SBB, NIMA, CBS, Kamer van Koophandel, Rijksoverheid, Frankwatching, Marketingfacts, HubSpot, Think with Google, Google Skillshop, Content Marketing Institute, Nielsen, Statista, Deloitte, McKinsey en Gartner, plus onderzoeksrapporten, vakpublicaties en whitepapers. Vermijd onbetrouwbare blogs, AI-theorie zonder bronbasis en verouderde theorie. Controleer of de theorie actueel is, in het werkveld wordt gebruikt, relevant is voor de leertaak en begrijpelijk is voor MBO niveau 4. Toets met de vraag: kan een beginnend Marketing & Communication Specialist dit morgen toepassen tijdens een praktijkles, BPV of opdracht? Zo nee, vereenvoudig of verwijder. Vertaal alle theorie naar begrijpelijke taal met praktische, herkenbare voorbeelden.
+
+STAP 4 - Ontwerp de workshop
+Ontwerp de workshop volgens deze structuur: 5 minuten opstart (aandacht pakken, voorkennis activeren, nieuwsgierigheid wekken), 25 minuten theorie (noodzakelijke kennis, directe koppeling met de leertaak, compact en toepasbaar, met voorbeelden en interactie), 25 minuten verwerkingsopdracht (oefenen met de theorie, voorbereiden op de leertaak, praktijkgericht en afwisselend, samenwerken waar passend), 5 minuten afsluiting (leerdoel controleren, reflecteren, verbinden met de praktijkles).
+
+STAP 5 - Onderbouwing
+Geef een korte analyse: waarom deze theorie is gekozen, waarom die aansluit op de leertaak, waarom die passend is voor MBO niveau 4 en welke bronnen zijn geraadpleegd.
+
+STAP 6 - Workshopoverzicht
+Maak een overzicht met onderdeel, tijd en doel: opstart 5 min, theorie 25 min, verwerking 25 min, afsluiting 5 min.
+
+STAP 7 - Leerdoel
+Formuleer het officiele leerdoel en het leerdoel in studententaal.
+
+STAP 8 - Lesverloop
+Werk de workshop volledig uit. Beschrijf per onderdeel: doel, docentactiviteit, studentactiviteit, werkvorm, benodigd materiaal en tips voor uitvoering.
+
+STAP 9 - Dia-uitwerking
+Werk iedere dia uit onder de kop Dia-uitwerking. Geef per dia: een titel als "## Dia N: titel", het doel van de dia, de kerninhoud op de dia (begrippen, modellen, theorie, voorbeelden en welke afbeeldingen, grafieken of schema's erop moeten), wat de docent uitlegt, vragen aan studenten met mogelijke antwoorden, de koppeling met de leertaak en de geschatte tijd. Werk door tot de workshop compleet is.
+
+STAP 10 - Verwerkingsopdracht
+Werk volledig uit: opdrachtomschrijving, leerdoel van de opdracht, werkvorm, stappenplan, benodigd materiaal, verwachte opbrengst, differentiatiemogelijkheden, veelgemaakte fouten en tips voor begeleiding.
+
+STAP 11 - Afsluiting
+Werk uit: reflectievraag, exit-ticket, controlevraag op het leerdoel, samenvatting, koppeling naar de praktijkles en naar de leertaak.
+
+STAP 12 - Docentnotities
+Geef aanvullend: waar studenten waarschijnlijk vastlopen, welke theorie extra aandacht nodig heeft, veelvoorkomende misconcepties, hoe de docent kan verdiepen, hoe de docent kan versnellen en praktische tips voor uitvoering.
+
+Kwaliteitseisen: gebruik de module als primaire bron, raadpleeg actuele bronnen, gebruik alleen betrouwbare en erkende theorie, houd rekening met de beroepspraktijk, MBO niveau 4 en de fase van de opleiding. Theorie moet direct toepasbaar zijn. De workshop moet aantoonbaar voorbereiden op de leertaak. Vermijd overbodige theorie. Wees concreet, praktisch en uitvoerbaar. Schrijf alsof de workshop morgen gegeven moet worden.`;
+  const DIDACTIEK_PROMPT = `Ik ben docent in het mbo (niveau 4). Ik upload een module met opdracht. Ontwerp op basis daarvan een complete, didactisch onderbouwde les of workshop die studenten voorbereidt op de bijbehorende leertaak. De module is leidend.
+
+#Jouw rol en didactische basis
+Je ontwerpt onderwijs vanuit bewuste didactische principes, niet vanuit losse leuke werkvormen. Je werkt niet vanuit één vast model, maar combineert deze leidende kaders:
+- Constructive Alignment (Biggs & Tang) en Backward Design (Wiggins & McTighe): leerdoel, bewijs van leren en leeractiviteiten stem je bewust op elkaar af. Je redeneert altijd leerdoel, dan bewijs van leren, dan pas activiteiten. Nooit eerst een werkvorm.
+- Cognitive Load Theory (Sweller), Rosenshine en expliciete directe instructie: doseer informatie, bouw complexiteit geleidelijk op, voorkom overvolle slides en te veel nieuwe begrippen tegelijk.
+- Retrieval practice, spacing en interleaving: laat eerder geleerde kennis actief ophalen.
+- Scaffolding en gradual release (ik doe, wij doen, jullie doen, jij doet).
+- Formatief handelen (Black & Wiliam): verzamel tijdens de les bewijs van waar studenten staan en handel daarop.
+- Bloom (herzien) als ontwerptaal om het denkniveau te bepalen, niet als verplichte ladder.
+- Self-Determination Theory (Deci & Ryan): competentie, relevantie en autonomie voor betrokkenheid.
+Je ontwerpt NIET op basis van vaste leerstijlen of de leerpiramide met vaste percentages. Daarvoor is onvoldoende bewijs. Je gebruikt wel multimodale variatie waar de inhoud daarom vraagt.
+
+STAP 1 - Analyseer de module en bepaal het niveau
+Analyseer de geuploade module grondig als primaire bron. Bepaal het vereiste eindniveau voor mbo 4 aan de hand van de combinatie: vakinhoudelijke complexiteit, beroepscontext, zelfstandigheid, verantwoordelijkheid, transfer en mate van onderbouwing. Niveau is meer dan moeilijkere woorden gebruiken. Gebruik als richtlijn de reeks weten, begrijpen, toepassen, afwegen, onderbouwen, zelfstandig handelen. Houd rekening met de feitelijke voorkennis van de groep om te bepalen hoeveel ondersteuning nodig is.
+
+STAP 2 - Maak aannames in plaats van vragen
+Stel geen vragen en wacht nergens op antwoord. Maak op ontbrekende punten (onderwerp, leerdoel, leertaak, fase van de opleiding, groepsgrootte, voorkennis, tools) een redelijke aanname op basis van de module en benoem die kort bovenaan onder de kop Aannames. Ga daarna direct door met ontwerpen.
+
+STAP 3 - Formuleer leerdoel en succescriteria
+Formuleer een kernleerdoel met gedrag, inhoud of context en een kwaliteitscriterium, zodat het observeerbaar en toetsbaar is. Vermijd vage doelen als kent of begrijpt zonder zichtbaar gedrag. Geef daarnaast 3 tot 4 concrete succescriteria in studententaal.
+
+STAP 4 - Constructive alignment
+Geef een overzicht dat per leerdoel of subdoel laat zien welke activiteit erbij hoort en welk bewijs van leren je verwacht. Zorg dat de eindcheck hetzelfde gedrag vraagt als het leerdoel.
+
+STAP 5 - Lesverloop
+Werk de les of workshop uit volgens deze ontwerplogica: orienteren en voorkennis activeren, leerdoel en relevantie, instructie en modeling, begeleid oefenen, zelfstandig toepassen, feedback en verbeteren, controleren en afsluiten. Geef per fase de tijd, de docentactiviteit, de studentactiviteit, de werkvorm, de didactische reden en het denkniveau. Kies werkvormen op basis van het leerdoel, met voorkeur voor authentieke beroepssituaties waarin studenten keuzes maken en onderbouwen.
+
+STAP 6 - Differentiatie, activering en betrokkenheid
+Beschrijf waar relevant extra ondersteuning, basis en verdieping, waarbij je het kernleerdoel gelijk houdt en vooral de ondersteuning en de uitdaging varieert. Zorg dat iedere student cognitief actief is, bijvoorbeeld via denk, schrijf, bespreek, deel in plaats van klassikaal een enkele student laten antwoorden. Verbind opdrachten aan herkenbare beroepssituaties en geef keuzevrijheid binnen duidelijke kaders.
+
+STAP 7 - Bewijs van leren en toetsing
+Beschrijf hoe je tijdens de les formatief handelt (bijvoorbeeld wisbordjes, exit-ticket, A/B/C-kaarten, think-pair-share) en wat je met de uitkomsten doet. Beschrijf een individuele eindcheck die het leerdoel toetst, met een korte rubric (bijvoorbeeld nog niet, in ontwikkeling, beheerst).
+
+STAP 8 - Dia-uitwerking
+Werk de dia's uit onder de kop Dia-uitwerking, met per dia een kop in de vorm "## Dia N: titel", het doel van de dia, de kerninhoud die op de dia hoort (bondig), wat de docent uitlegt of modelt, vragen aan studenten en de koppeling met het leerdoel. Houd de kerninhoud per dia kort, zodat er geen overvolle slides ontstaan.
+
+STAP 9 - Docentnotities
+Geef aanvullend: waar studenten waarschijnlijk vastlopen, veelvoorkomende misconcepties, hoe je kunt verdiepen of versnellen, en hoe je de les bijstuurt op basis van de formatieve checks.
+
+Kwaliteitscheck voor je afrondt: vragen het leerdoel, de activiteiten en de eindcheck hetzelfde gedrag? Zo niet, pas het ontwerp aan. Schrijf concreet, praktisch en direct uitvoerbaar, alsof de les morgen gegeven moet worden. Gebruik nooit het em-dash teken.`;
+
+  const PROFILES = { standaard: DEFAULT_PROMPT, didactiek: DIDACTIEK_PROMPT };
+  const wsProfiel = document.getElementById('wsProfiel');
+  const wsPromptEl = document.getElementById('wsPrompt');
+  function loadProfiel() { wsPromptEl.value = PROFILES[wsProfiel.value] || DEFAULT_PROMPT; }
+  wsProfiel.addEventListener('change', loadProfiel);
+  loadProfiel();
+</script>
+</body>
+</html>
