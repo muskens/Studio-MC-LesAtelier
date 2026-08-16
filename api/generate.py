@@ -219,11 +219,32 @@ class handler(BaseHTTPRequestHandler):
         )
         self.send_header(
             "Access-Control-Allow-Methods",
-            "POST, OPTIONS",
+            "GET, POST, OPTIONS",
         )
         self.send_header(
             "Access-Control-Allow-Headers",
             "Content-Type",
+        )
+
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header(
+            "Content-Type",
+            "application/json; charset=utf-8",
+        )
+        self._cors()
+        self.end_headers()
+
+        response = {
+            "status": "ok",
+            "message": "Studio MC LesAtelier API werkt.",
+        }
+
+        self.wfile.write(
+            json.dumps(
+                response,
+                ensure_ascii=False,
+            ).encode("utf-8")
         )
 
     def do_OPTIONS(self):
