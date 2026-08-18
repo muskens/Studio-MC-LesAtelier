@@ -1,7 +1,7 @@
 {
   "functions": {
     "api/generate.py": { "includeFiles": "api/kw1c_template.pptx", "maxDuration": 60 },
-    "api/workshop.py": { "maxDuration": 60 },
+    "api/workshop.py": { "maxDuration": 300 },
     "api/workshop_pptx.py": { "includeFiles": "api/kw1c_template.pptx", "maxDuration": 60 },
     "api/word.py": { "includeFiles": "api/kw1c_report_template.docx", "maxDuration": 60 }
   }
